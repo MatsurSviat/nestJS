@@ -20,7 +20,7 @@ import {
 import { LocalAuthGuard } from "src/auth/local-auth.guard";
 import { createUserDto } from "./dto/create-user.dto";
 import { updateUserDto } from "./dto/update-user.dto";
-import { User } from "./schemas/user.schema";
+import { User } from "./user.entity";
 import { UserService } from "./user.service";
 
 @ApiTags("User")
@@ -29,26 +29,14 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @ApiBody({ type: [createUserDto] })
-  @ApiOkResponse({
-    schema: {
-      allOf: [
-        {
-          properties: {
-            results: {
-              type: "array",
-              items: { $ref: getSchemaPath(User) },
-            },
-          },
-        },
-      ],
-    },
-  })
+  @ApiBody({ type: [User] })
+  @ApiOkResponse({ type: [User] })
   getAllUsers(): Promise<User[]> {
     return this.userService.getAllUsers();
   }
 
   @Get(":id")
+  @UseGuards(LocalAuthGuard)
   @ApiParam({
     name: "id",
     required: true,
@@ -63,16 +51,25 @@ export class UserController {
     return this.userService.getOneUser(id);
   }
 
-  @Get("useremail")
+  @Get("username")
   @UseGuards(LocalAuthGuard)
-  getUserByUserEmail(@Param() param) {
-    return this.userService.getUserByUserEmail(param.email);
+  @ApiParam({
+    name: "username",
+    required: true,
+    description: "Should be an username that exists in the database",
+    type: String,
+  })
+  @ApiOkResponse({
+    description: "Get the username",
+    type: User,
+  })
+  getUserByUsername(@Param("username") username) {
+    return this.userService.getUserByUsername(username);
   }
 
   @Post("register")
   @ApiCreatedResponse({
     description: "The user has been successfully created.",
-    type: User,
   })
   @ApiForbiddenResponse({ description: "Forbidden." })
   registerUser(@Body() createUserDto: createUserDto) {
@@ -80,6 +77,7 @@ export class UserController {
   }
 
   @Delete(":id")
+  @UseGuards(LocalAuthGuard)
   @ApiParam({
     name: "id",
     required: true,
@@ -92,6 +90,7 @@ export class UserController {
   }
 
   @Put(":id")
+  @UseGuards(LocalAuthGuard)
   @ApiOkResponse({
     description: "The user with taken id was updated",
     type: User,

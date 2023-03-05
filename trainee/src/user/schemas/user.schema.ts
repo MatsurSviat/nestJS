@@ -21,15 +21,15 @@ export class User {
   lastName: string;
 
   @ApiProperty({
-    description: "The user email",
+    description: "The user name",
     example: "willSmith@mail.com",
   })
   @Prop()
-  email: string;
+  username: string;
 
   @ApiProperty({
     description: "The user password",
-    example: "secredPassword",
+    example: "password",
   })
   @Prop()
   password: string;

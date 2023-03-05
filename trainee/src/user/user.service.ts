@@ -21,9 +21,9 @@ export class UserService {
     return this.UserModel.findById(id);
   }
 
-  async getUserByUserEmail(email: string) {
+  async getUserByUsername(username: string) {
     return this.UserModel.findOne({
-      email,
+      username,
     }).exec();
   }
 
@@ -37,7 +37,7 @@ export class UserService {
 
   async registerUser(createUserDto: createUserDto): Promise<User> {
     const createUser = new this.UserModel(createUserDto);
-    const user = await this.getUserByUserEmail(createUser.email);
+    const user = await this.getUserByUsername(createUser.username);
     if (user) {
       throw new BadRequestException();
     }
