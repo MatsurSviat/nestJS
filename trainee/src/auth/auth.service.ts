@@ -12,9 +12,9 @@ export class AuthService {
     private hashService: HashService
   ) {}
 
-  async validateUser(email: string, pass: string): Promise<User> {
-    const user = await this.userService.getUserByUsername(email);
-    if (user && (await this.hashService.comparePassword(pass, user.password))) {
+  async validateUser(username: string, pass: string): Promise<User> {
+    const user = await this.userService.getUserByUsername(username);
+    if (user && user.password === pass) {
       return user;
     }
     return null;
@@ -22,7 +22,7 @@ export class AuthService {
 
   async login(user: any) {
     const payload = {
-      username: user.email,
+      username: user.username,
       sub: user.id,
     };
     return {

@@ -15,7 +15,6 @@ export class ProfileService {
   async updateUser(id: string, updateUserDto: updateUserDto): Promise<User> {
     return this.UserModel.findByIdAndUpdate(id, updateUserDto)
       .setOptions({
-        overwrite: true,
         new: true,
       })
       .populate("firstName")

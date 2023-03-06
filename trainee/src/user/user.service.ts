@@ -29,12 +29,9 @@ export class UserService {
   async registerUser(createUserDto: createUserDto): Promise<User> {
     const createUser = new this.UserModel(createUserDto);
     const user = await this.getUserByUsername(createUser.username);
-    if (user) {
-      throw new BadRequestException();
-    }
-    createUser.password = await this.hashService.hashPassword(
-      createUser.password
-    );
+    if (user) throw new BadRequestException();
+    // createUser.password = await this.hashService.hashPassword(
+    //   createUser.password
 
     return createUser.save();
   }
