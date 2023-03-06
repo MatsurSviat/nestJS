@@ -18,12 +18,14 @@ export class updateUserDto {
   @ApiProperty({
     description: "The user email",
     example: "willSmith@mail.com",
+    required: true,
   })
   readonly username: string;
 
   @ApiProperty({
     description: "The user password",
     example: "password",
+    required: true,
   })
   readonly password: string;
 }

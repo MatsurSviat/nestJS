@@ -9,6 +9,7 @@ export class User {
   @ApiProperty({
     description: "The user first name",
     example: "Will",
+    required: false,
   })
   @Prop()
   firstName: string;
@@ -16,6 +17,7 @@ export class User {
   @ApiProperty({
     description: "The user last name",
     example: "Smith",
+    required: false,
   })
   @Prop()
   lastName: string;

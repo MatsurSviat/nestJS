@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  UseGuards,
-} from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
 import {
   ApiBody,
   ApiCreatedResponse,
@@ -15,12 +6,9 @@ import {
   ApiOkResponse,
   ApiParam,
   ApiTags,
-  getSchemaPath,
 } from "@nestjs/swagger";
-import { LocalAuthGuard } from "src/auth/local-auth.guard";
 import { createUserDto } from "./dto/create-user.dto";
-import { updateUserDto } from "./dto/update-user.dto";
-import { User } from "./user.entity";
+import { UserEntity } from "./user.entity";
 import { UserService } from "./user.service";
 
 @ApiTags("User")
@@ -29,14 +17,13 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @ApiBody({ type: [User] })
-  @ApiOkResponse({ type: [User] })
-  getAllUsers(): Promise<User[]> {
+  @ApiBody({ type: [UserEntity] })
+  @ApiOkResponse({ type: [UserEntity] })
+  getAllUsers(): Promise<UserEntity[]> {
     return this.userService.getAllUsers();
   }
 
   @Get(":id")
-  @UseGuards(LocalAuthGuard)
   @ApiParam({
     name: "id",
     required: true,
@@ -45,14 +32,13 @@ export class UserController {
   })
   @ApiOkResponse({
     description: "Get the user with taken id.",
-    type: User,
+    type: UserEntity,
   })
-  getOneUser(@Param("id") id): Promise<User> {
+  getOneUser(@Param("id") id): Promise<UserEntity> {
     return this.userService.getOneUser(id);
   }
 
   @Get("username")
-  @UseGuards(LocalAuthGuard)
   @ApiParam({
     name: "username",
     required: true,
@@ -61,44 +47,20 @@ export class UserController {
   })
   @ApiOkResponse({
     description: "Get the username",
-    type: User,
+    type: UserEntity,
   })
   getUserByUsername(@Param("username") username) {
     return this.userService.getUserByUsername(username);
   }
 
   @Post("register")
+  @ApiBody({ type: [UserEntity] })
   @ApiCreatedResponse({
     description: "The user has been successfully created.",
+    type: UserEntity,
   })
   @ApiForbiddenResponse({ description: "Forbidden." })
   registerUser(@Body() createUserDto: createUserDto) {
     return this.userService.registerUser(createUserDto);
-  }
-
-  @Delete(":id")
-  @UseGuards(LocalAuthGuard)
-  @ApiParam({
-    name: "id",
-    required: true,
-    description: "Should be an id of a user that exists in the database",
-    type: String,
-  })
-  @ApiOkResponse({ description: "The user with taken id was removed" })
-  deleteUser(@Param("id") id): Promise<User> {
-    return this.userService.removeUser(id);
-  }
-
-  @Put(":id")
-  @UseGuards(LocalAuthGuard)
-  @ApiOkResponse({
-    description: "The user with taken id was updated",
-    type: User,
-  })
-  updateUser(
-    @Body() updateUserDto: updateUserDto,
-    @Param("id") id
-  ): Promise<User> {
-    return this.userService.updateUser(id, updateUserDto);
   }
 }
