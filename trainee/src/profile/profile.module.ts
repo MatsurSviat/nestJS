@@ -10,12 +10,16 @@ import { AuthService } from "src/auth/auth.service";
 import { HashService } from "src/user/hash.service";
 import { LocalStrategy } from "src/auth/local.strategy";
 import { JwtStrategy } from "src/auth/jwt.strategy";
+import { MulterModule } from "@nestjs/platform-express";
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     JwtModule.register({
       secret: jwtConstants.secret,
+    }),
+    MulterModule.register({
+      dest: "./uploads",
     }),
   ],
   providers: [

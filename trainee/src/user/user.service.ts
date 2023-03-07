@@ -20,6 +20,10 @@ export class UserService {
     return this.UserModel.findById(id);
   }
 
+  async removeUser(id: string): Promise<User> {
+    return this.UserModel.findByIdAndRemove(id);
+  }
+
   async getUserByUsername(username: string) {
     return this.UserModel.findOne({
       username,
@@ -30,8 +34,6 @@ export class UserService {
     const createUser = new this.UserModel(createUserDto);
     const user = await this.getUserByUsername(createUser.username);
     if (user) throw new BadRequestException();
-    // createUser.password = await this.hashService.hashPassword(
-    //   createUser.password
 
     return createUser.save();
   }

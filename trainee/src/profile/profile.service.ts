@@ -8,16 +8,9 @@ import { updateUserDto } from "./dto/update-user.dto";
 export class ProfileService {
   constructor(@InjectModel(User.name) private UserModel: Model<userDocument>) {}
 
-  async removeUser(id: string): Promise<User> {
-    return this.UserModel.findByIdAndRemove(id);
-  }
-
   async updateUser(id: string, updateUserDto: updateUserDto): Promise<User> {
-    return this.UserModel.findByIdAndUpdate(id, updateUserDto)
-      .setOptions({
-        new: true,
-      })
-      .populate("firstName")
-      .populate("lastName");
+    return this.UserModel.findByIdAndUpdate(id, updateUserDto).setOptions({
+      new: true,
+    });
   }
 }
