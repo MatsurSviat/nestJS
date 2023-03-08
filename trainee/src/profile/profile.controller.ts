@@ -18,6 +18,7 @@ import { User } from "src/user/schemas/user.schema";
 import { updateUserDto } from "./dto/update-user.dto";
 import { ProfileService } from "./profile.service";
 import { extname } from "path";
+import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 
 @ApiTags("Profile")
 @Controller("profile")
@@ -25,6 +26,7 @@ export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
   @Put(":id")
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({
     description: "The user with taken id was updated",
     type: updateUserDto,
@@ -37,6 +39,7 @@ export class ProfileController {
   }
 
   @Post("upload")
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(
     FileInterceptor("file", {
       storage: diskStorage({

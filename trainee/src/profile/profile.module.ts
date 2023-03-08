@@ -11,6 +11,7 @@ import { HashService } from "src/user/hash.service";
 import { LocalStrategy } from "src/auth/local.strategy";
 import { JwtStrategy } from "src/auth/jwt.strategy";
 import { MulterModule } from "@nestjs/platform-express";
+import { RolesGuard } from "src/user/roles.guard";
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { MulterModule } from "@nestjs/platform-express";
     AuthService,
     LocalStrategy,
     JwtStrategy,
+    RolesGuard,
   ],
   controllers: [ProfileController],
 })

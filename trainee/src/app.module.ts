@@ -6,6 +6,8 @@ import { AuthModule } from "./auth/auth.module";
 import { UserModule } from "./user/user.module";
 import { ProfileModule } from "./profile/profile.module";
 import { MulterModule } from "@nestjs/platform-express";
+import { APP_GUARD } from "@nestjs/core";
+import { RolesGuard } from "./user/roles.guard";
 
 @Module({
   imports: [
@@ -18,6 +20,12 @@ import { MulterModule } from "@nestjs/platform-express";
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule {}

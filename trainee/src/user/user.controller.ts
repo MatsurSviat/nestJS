@@ -18,6 +18,9 @@ import {
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { LocalAuthGuard } from "src/auth/local-auth.guard";
 import { createUserDto } from "./dto/create-user.dto";
+import { Role } from "./role.enum";
+import { Roles } from "./roles.decorator";
+import { RolesGuard } from "./roles.guard";
 import { User } from "./schemas/user.schema";
 import { UserEntity } from "./user.entity";
 import { UserService } from "./user.service";
@@ -28,14 +31,16 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @ApiBody({ type: [UserEntity] })
-  @ApiOkResponse({ type: [UserEntity] })
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin)
+  @ApiOkResponse({ type: UserEntity })
   getAllUsers(): Promise<UserEntity[]> {
     return this.userService.getAllUsers();
   }
 
   @Get(":id")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @ApiParam({
     name: "id",
     required: true,
@@ -51,6 +56,8 @@ export class UserController {
   }
 
   @Delete(":id")
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @ApiParam({
     name: "id",
     required: true,

@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import { HydratedDocument } from "mongoose";
+import { Role } from "../role.enum";
 
 export type userDocument = HydratedDocument<User>;
 
@@ -35,6 +36,13 @@ export class User {
   })
   @Prop()
   password: string;
+
+  @ApiProperty({
+    description: "The user role",
+    example: "user / admin",
+  })
+  @Prop()
+  roles: Role[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
