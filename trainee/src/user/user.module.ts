@@ -27,10 +27,6 @@ import { UserService } from "./user.service";
     LocalStrategy,
     JwtStrategy,
     RolesGuard,
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
   ],
   controllers: [UserController],
   exports: [UserService],

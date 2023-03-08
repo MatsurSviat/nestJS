@@ -1,10 +1,21 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class LoginResDto {
+export class AuthResDto {
   @ApiProperty({
-    description: "The access token",
-    example:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDA0ZjE1YjQwMDNiOGI4MGY5ZmZkZjciLCJpYXQiOjE2NzgwNDU1MzksImV4cCI6MTY4MzIyOTUzOX0.lm-ZlTgZfgEqypxZGOotlgShm9-36K2cqNILPRLKNBc",
+    description: "The user name",
+    example: "newUser@mail.com",
   })
-  accessToken: string;
+  username: string;
+
+  @ApiProperty({
+    description: "The user password",
+    example: "password",
+  })
+  password: string;
+
+  @ApiProperty({
+    description: "The user role",
+    example: "user",
+  })
+  roles: string;
 }

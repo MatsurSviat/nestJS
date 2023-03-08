@@ -1,7 +1,8 @@
 import { Controller, Post, UseGuards, Request, Body } from "@nestjs/common";
-import { ApiOkResponse, ApiParam, ApiTags } from "@nestjs/swagger";
+import { ApiBody, ApiOkResponse, ApiParam, ApiTags } from "@nestjs/swagger";
 import { AuthService } from "./auth.service";
-import { LoginResDto } from "./dto/auth.dto";
+import { AuthResDto } from "./dto/auth.dto";
+import { LoginResDto } from "./dto/login.dto";
 import { LocalAuthGuard } from "./local-auth.guard";
 
 @Controller("auth")
@@ -11,10 +12,7 @@ export class AuthController {
   @ApiTags("Auth")
   @UseGuards(LocalAuthGuard)
   @Post("/login")
-  @ApiParam({
-    name: "payload",
-    required: true,
-  })
+  @ApiBody({ type: AuthResDto })
   @ApiOkResponse({
     description: "Get the username",
     type: LoginResDto,

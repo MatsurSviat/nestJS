@@ -16,7 +16,6 @@ import {
   ApiTags,
 } from "@nestjs/swagger";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
-import { LocalAuthGuard } from "src/auth/local-auth.guard";
 import { createUserDto } from "./dto/create-user.dto";
 import { Role } from "./role.enum";
 import { Roles } from "./roles.decorator";
