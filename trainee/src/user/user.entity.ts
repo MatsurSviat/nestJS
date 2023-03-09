@@ -1,10 +1,19 @@
 import { ApiProperty } from "@nestjs/swagger";
 
 export class UserEntity {
-  @ApiProperty()
+  @ApiProperty({
+    description: "The user name / email",
+    example: "newUser@gmail.com",
+  })
   username: string;
-  firstName?: string | null;
-  @ApiProperty({ required: false, nullable: true })
+  @ApiProperty({
+    description: "The user password",
+    example: "password",
+  })
   password: string;
-  lastName?: string | null;
+  @ApiProperty({
+    description: "The user role",
+    example: "admin",
+  })
+  roles: Array<string>;
 }

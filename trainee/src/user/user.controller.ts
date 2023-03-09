@@ -8,10 +8,12 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiOkResponse,
+  ApiOperation,
   ApiParam,
   ApiTags,
 } from "@nestjs/swagger";
@@ -23,22 +25,25 @@ import { RolesGuard } from "./roles.guard";
 import { User } from "./schemas/user.schema";
 import { UserEntity } from "./user.entity";
 import { UserService } from "./user.service";
-
 @ApiTags("User")
 @Controller("users")
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiOperation({ summary: "Get the list of all users" })
   @Roles(Role.Admin)
-  @ApiOkResponse({ type: UserEntity })
-  getAllUsers(): Promise<UserEntity[]> {
+  @ApiOkResponse({ type: createUserDto })
+  getAllUsers(): Promise<User[]> {
     return this.userService.getAllUsers();
   }
 
   @Get(":id")
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiOperation({ summary: "Get one user by id" })
   @Roles(Role.Admin)
   @ApiParam({
     name: "id",
@@ -48,14 +53,16 @@ export class UserController {
   })
   @ApiOkResponse({
     description: "Get the user with taken id.",
-    type: UserEntity,
+    type: User,
   })
   getOneUser(@Param("id") id): Promise<UserEntity> {
     return this.userService.getOneUser(id);
   }
 
   @Delete(":id")
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiOperation({ summary: "Delete one user by id" })
   @Roles(Role.Admin)
   @ApiParam({
     name: "id",
@@ -69,6 +76,7 @@ export class UserController {
   }
 
   @Get("username")
+  @ApiOperation({ summary: "Get the user by username" })
   @ApiParam({
     name: "username",
     required: true,
@@ -84,7 +92,11 @@ export class UserController {
   }
 
   @Post("register")
-  @ApiBody({ type: [UserEntity] })
+  @ApiOperation({ summary: "The user registration" })
+  @ApiBody({
+    description: "The user registration",
+    type: UserEntity,
+  })
   @ApiCreatedResponse({
     description: "The user has been successfully created.",
     type: UserEntity,

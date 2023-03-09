@@ -11,7 +11,14 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { ApiOkResponse, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from "@nestjs/swagger";
 import { diskStorage } from "multer";
 import { LocalAuthGuard } from "src/auth/local-auth.guard";
 import { User } from "src/user/schemas/user.schema";
@@ -19,6 +26,7 @@ import { updateUserDto } from "./dto/update-user.dto";
 import { ProfileService } from "./profile.service";
 import { extname } from "path";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
+import { AvatarUploadDto } from "./dto/avatar-upload.dto";
 
 @ApiTags("Profile")
 @Controller("profile")
@@ -26,7 +34,15 @@ export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
   @Put(":id")
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: "Update the user by id" })
+  @ApiParam({
+    name: "id",
+    required: true,
+    description: "Should be an id of a user that exists in the database",
+    type: String,
+  })
   @ApiOkResponse({
     description: "The user with taken id was updated",
     type: updateUserDto,
@@ -39,7 +55,17 @@ export class ProfileController {
   }
 
   @Post("upload")
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: "Upload the user avatar photo" })
+  @ApiBody({
+    description: "Upload avatar photo",
+    type: AvatarUploadDto,
+  })
+  @ApiOkResponse({
+    description: "The user avatar was successfully uploaded",
+    type: AvatarUploadDto,
+  })
   @UseInterceptors(
     FileInterceptor("file", {
       storage: diskStorage({
@@ -59,6 +85,19 @@ export class ProfileController {
   }
 
   @Get(":imgpath")
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Get the user avatar photo" })
+  @ApiParam({
+    name: "imgpath",
+    required: true,
+    description:
+      "Should be a path of a user avatar photo that exists in the database",
+    type: String,
+  })
+  @ApiOkResponse({
+    description: "The user with taken id was removed",
+    type: AvatarUploadDto,
+  })
   seeUploadedFile(@Param("imgpath") image, @Res() res) {
     return res.sendFile(image, { root: "uploads" });
   }

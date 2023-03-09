@@ -15,7 +15,7 @@ export class AuthResDto {
 
   @ApiProperty({
     description: "The user role",
-    example: "user",
+    example: ["user"],
   })
-  roles: string;
+  roles: Array<String>;
 }

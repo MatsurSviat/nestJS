@@ -29,4 +29,10 @@ export class createUserDto {
     example: "password",
   })
   readonly password: string;
+
+  @ApiProperty({
+    description: "The user role",
+    example: "admin",
+  })
+  readonly roles: Array<string>;
 }
