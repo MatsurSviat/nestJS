@@ -35,7 +35,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiOperation({ summary: "Get the list of all users" })
   @Roles(Role.Admin)
-  @ApiOkResponse({ type: createUserDto })
+  @ApiOkResponse({ type: [createUserDto] })
   getAllUsers(): Promise<User[]> {
     return this.userService.getAllUsers();
   }

@@ -8,6 +8,7 @@ import { ProfileModule } from "./profile/profile.module";
 import { MulterModule } from "@nestjs/platform-express";
 import { APP_GUARD } from "@nestjs/core";
 import { RolesGuard } from "./user/roles.guard";
+import { ArticlesModule } from './articles/articles.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { RolesGuard } from "./user/roles.guard";
     MulterModule.register({
       dest: "./uploads",
     }),
+    ArticlesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
