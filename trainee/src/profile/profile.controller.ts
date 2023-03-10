@@ -20,7 +20,6 @@ import {
   ApiTags,
 } from "@nestjs/swagger";
 import { diskStorage } from "multer";
-import { LocalAuthGuard } from "src/auth/local-auth.guard";
 import { User } from "src/user/schemas/user.schema";
 import { updateUserDto } from "./dto/update-user.dto";
 import { ProfileService } from "./profile.service";

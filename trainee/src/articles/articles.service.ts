@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Article, ArticleDocument } from "./schemas/articles.schema";
@@ -20,18 +20,25 @@ export class ArticlesService {
     return this.articleModel.find().exec();
   }
 
-  async getOneArticle(id: string): Promise<Article> {
-    return this.articleModel.findById(id);
+  async getOneArticle(articleId: string): Promise<Article> {
+    return this.articleModel.findById(articleId);
   }
 
   async updateArticle(
-    id: string,
+    userId: string,
+    articleId: string,
     updateArticleDto: updateArticleDto
   ): Promise<updateArticleDto> {
-    return this.articleModel.findByIdAndUpdate(id, updateArticleDto);
+    const article = await this.articleModel.findOne({
+      id: articleId,
+      author: userId,
+    });
+    if (!article) throw new ForbiddenException("You cannot edit the article");
+
+    return this.articleModel.findByIdAndUpdate(articleId, updateArticleDto);
   }
 
-  async removeArticle(id: string) {
-    return this.articleModel.findByIdAndRemove(id);
+  async removeArticle(articleId: string) {
+    return this.articleModel.findByIdAndRemove(articleId);
   }
 }

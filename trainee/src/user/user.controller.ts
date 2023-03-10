@@ -91,7 +91,7 @@ export class UserController {
     return this.userService.getUserByUsername(username);
   }
 
-  @Post("register")
+  @Post("signup")
   @ApiOperation({ summary: "The user registration" })
   @ApiBody({
     description: "The user registration",

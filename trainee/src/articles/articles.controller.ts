@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Req,
 } from "@nestjs/common";
 import {
   ApiCreatedResponse,
@@ -19,6 +20,8 @@ import { createArticleDto } from "./dto/create-article.dto";
 import { Article } from "./schemas/articles.schema";
 import { updateArticleDto } from "./dto/update-article.dto";
 import { ArticleEntity } from "./article.entity";
+import { User } from "src/user/schemas/user.schema";
+import { createUserDto } from "src/user/dto/create-user.dto";
 
 @ApiTags("Article")
 @Controller("articles")
@@ -71,10 +74,15 @@ export class ArticlesController {
     type: ArticleEntity,
   })
   updateArticle(
-    @Param("id") id: string,
+    @Req() req: any,
+    @Param("id") articleId: string,
     @Body() updateArticleDto: updateArticleDto
   ) {
-    return this.articlesService.updateArticle(id, updateArticleDto);
+    return this.articlesService.updateArticle(
+      req.user.id,
+      articleId,
+      updateArticleDto
+    );
   }
 
   @Delete(":id")
