@@ -6,12 +6,12 @@ import { User } from "src/user/schemas/user.schema";
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userService: UserService,
-    private jwtService: JwtService
+    private readonly UserService: UserService,
+    private JwtService: JwtService
   ) {}
 
   async validateUser(username: string, pass: string): Promise<User> {
-    const user = await this.userService.getUserByUsername(username);
+    const user = await this.UserService.getUserByUsername(username);
     if (user && user.password === pass) {
       return user;
     }
@@ -25,7 +25,7 @@ export class AuthService {
       roles: user.roles,
     };
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.JwtService.sign(payload),
     };
   }
 }

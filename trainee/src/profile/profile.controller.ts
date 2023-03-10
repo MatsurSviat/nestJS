@@ -21,7 +21,7 @@ import {
 } from "@nestjs/swagger";
 import { diskStorage } from "multer";
 import { User } from "src/user/schemas/user.schema";
-import { updateUserDto } from "./dto/update-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
 import { ProfileService } from "./profile.service";
 import { extname } from "path";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
@@ -30,7 +30,7 @@ import { AvatarUploadDto } from "./dto/avatar-upload.dto";
 @ApiTags("Profile")
 @Controller("profile")
 export class ProfileController {
-  constructor(private readonly profileService: ProfileService) {}
+  constructor(private readonly ProfileService: ProfileService) {}
 
   @Put(":id")
   @ApiBearerAuth()
@@ -44,13 +44,13 @@ export class ProfileController {
   })
   @ApiOkResponse({
     description: "The user with taken id was updated",
-    type: updateUserDto,
+    type: UpdateUserDto,
   })
   updateUser(
-    @Body() updateUserDto: updateUserDto,
+    @Body() UpdateUserDto: UpdateUserDto,
     @Param("id") id
   ): Promise<User> {
-    return this.profileService.updateUser(id, updateUserDto);
+    return this.ProfileService.updateUser(id, UpdateUserDto);
   }
 
   @Post("upload")

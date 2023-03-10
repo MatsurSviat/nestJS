@@ -16,33 +16,31 @@ import {
   ApiTags,
 } from "@nestjs/swagger";
 import { ArticlesService } from "./articles.service";
-import { createArticleDto } from "./dto/create-article.dto";
+import { CreateArticleDto } from "./dto/create-article.dto";
 import { Article } from "./schemas/articles.schema";
-import { updateArticleDto } from "./dto/update-article.dto";
+import { UpdateArticleDto } from "./dto/update-article.dto";
 import { ArticleEntity } from "./article.entity";
-import { User } from "src/user/schemas/user.schema";
-import { createUserDto } from "src/user/dto/create-user.dto";
 
 @ApiTags("Article")
 @Controller("articles")
 export class ArticlesController {
-  constructor(private readonly articlesService: ArticlesService) {}
+  constructor(private readonly ArticlesService: ArticlesService) {}
 
   @Post("create")
   @ApiOperation({ summary: "Create an article" })
   @ApiCreatedResponse({
     description: "The article has been successfully created.",
-    type: createArticleDto,
+    type: CreateArticleDto,
   })
-  createArticle(@Body() createArticleDto: createArticleDto) {
-    return this.articlesService.createArticle(createArticleDto);
+  createArticle(@Body() CreateArticleDto: CreateArticleDto) {
+    return this.ArticlesService.createArticle(CreateArticleDto);
   }
 
   @Get()
   @ApiOperation({ summary: "Get all articles" })
-  @ApiOkResponse({ type: [createArticleDto] })
+  @ApiOkResponse({ type: [CreateArticleDto] })
   getAllArticles(): Promise<Article[]> {
-    return this.articlesService.getAllArticles();
+    return this.ArticlesService.getAllArticles();
   }
 
   @Get(":id")
@@ -58,7 +56,7 @@ export class ArticlesController {
     type: ArticleEntity,
   })
   getOneArticle(@Param("id") id: string) {
-    return this.articlesService.getOneArticle(id);
+    return this.ArticlesService.getOneArticle(id);
   }
 
   @Put(":id")
@@ -76,12 +74,12 @@ export class ArticlesController {
   updateArticle(
     @Req() req: any,
     @Param("id") articleId: string,
-    @Body() updateArticleDto: updateArticleDto
+    @Body() UpdateArticleDto: UpdateArticleDto
   ) {
-    return this.articlesService.updateArticle(
+    return this.ArticlesService.updateArticle(
       req.user.id,
       articleId,
-      updateArticleDto
+      UpdateArticleDto
     );
   }
 
@@ -99,6 +97,6 @@ export class ArticlesController {
   })
   @ApiOperation({ summary: "Delete the article by taken id" })
   remove(@Param("id") id: string) {
-    return this.articlesService.removeArticle(id);
+    return this.ArticlesService.removeArticle(id);
   }
 }

@@ -18,7 +18,7 @@ import {
   ApiTags,
 } from "@nestjs/swagger";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
-import { createUserDto } from "./dto/create-user.dto";
+import { CreateUserDto } from "./dto/create-user.dto";
 import { Role } from "./role.enum";
 import { Roles } from "./roles.decorator";
 import { RolesGuard } from "./roles.guard";
@@ -28,16 +28,16 @@ import { UserService } from "./user.service";
 @ApiTags("User")
 @Controller("users")
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly UserService: UserService) {}
 
   @Get()
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiOperation({ summary: "Get the list of all users" })
   @Roles(Role.Admin)
-  @ApiOkResponse({ type: [createUserDto] })
+  @ApiOkResponse({ type: [CreateUserDto] })
   getAllUsers(): Promise<User[]> {
-    return this.userService.getAllUsers();
+    return this.UserService.getAllUsers();
   }
 
   @Get(":id")
@@ -56,7 +56,7 @@ export class UserController {
     type: User,
   })
   getOneUser(@Param("id") id): Promise<UserEntity> {
-    return this.userService.getOneUser(id);
+    return this.UserService.getOneUser(id);
   }
 
   @Delete(":id")
@@ -72,7 +72,7 @@ export class UserController {
   })
   @ApiOkResponse({ description: "The user with taken id was removed" })
   deleteUser(@Param("id") id): Promise<User> {
-    return this.userService.removeUser(id);
+    return this.UserService.removeUser(id);
   }
 
   @Get("username")
@@ -88,7 +88,7 @@ export class UserController {
     type: UserEntity,
   })
   getUserByUsername(@Param("username") username) {
-    return this.userService.getUserByUsername(username);
+    return this.UserService.getUserByUsername(username);
   }
 
   @Post("signup")
@@ -102,7 +102,7 @@ export class UserController {
     type: UserEntity,
   })
   @ApiForbiddenResponse({ description: "Forbidden." })
-  registerUser(@Body() createUserDto: createUserDto) {
-    return this.userService.registerUser(createUserDto);
+  registerUser(@Body() CreateUserDto: CreateUserDto) {
+    return this.UserService.registerUser(CreateUserDto);
   }
 }

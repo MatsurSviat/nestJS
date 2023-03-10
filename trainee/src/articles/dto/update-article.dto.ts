@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class updateArticleDto {
+export class UpdateArticleDto {
   @ApiProperty({
     description: "The article id",
     example: "6409d3a87ba1325fc0a3da18",
