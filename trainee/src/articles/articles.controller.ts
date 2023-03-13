@@ -7,8 +7,10 @@ import {
   Post,
   Put,
   Req,
+  UseGuards,
 } from "@nestjs/common";
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
@@ -20,6 +22,7 @@ import { CreateArticleDto } from "./dto/create-article.dto";
 import { Article } from "./schemas/articles.schema";
 import { UpdateArticleDto } from "./dto/update-article.dto";
 import { ArticleEntity } from "./article.entity";
+import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 
 @ApiTags("Article")
 @Controller("articles")
@@ -59,6 +62,8 @@ export class ArticlesController {
     return this.ArticlesService.getOneArticle(id);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Put(":id")
   @ApiOperation({ summary: "Update the article by taken id" })
   @ApiParam({
@@ -77,7 +82,7 @@ export class ArticlesController {
     @Body() UpdateArticleDto: UpdateArticleDto
   ) {
     return this.ArticlesService.updateArticle(
-      req.user.id,
+      req.user.sub,
       articleId,
       UpdateArticleDto
     );
